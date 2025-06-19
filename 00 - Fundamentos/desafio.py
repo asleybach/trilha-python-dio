@@ -1,3 +1,6 @@
+import datetime
+from datetime import datetime
+
 menu = """
 
 [d] Depositar
@@ -12,6 +15,8 @@ limite = 500
 extrato = ""
 numero_saques = 0
 LIMITE_SAQUES = 3
+titulo_extracto = "EXTRATO"
+pie_extracto = "|"
 
 while True:
 
@@ -22,7 +27,7 @@ while True:
 
         if valor > 0:
             saldo += valor
-            extrato += f"Depósito: R$ {valor:.2f}\n"
+            extrato += f"Depósito: R$ {valor:.2f} data da operação: {datetime.today().strftime('%H:%M:%S')} \n"
 
         else:
             print("Operação falhou! O valor informado é inválido.")
@@ -47,17 +52,22 @@ while True:
 
         elif valor > 0:
             saldo -= valor
-            extrato += f"Saque: R$ {valor:.2f}\n"
+            extrato += f"Saque: R$ {valor:.2f} data da operação: {datetime.today().strftime('%H:%M:%S')} \n"
             numero_saques += 1
 
         else:
             print("Operação falhou! O valor informado é inválido.")
 
     elif opcao == "e":
-        print("\n================ EXTRATO ================")
-        print("Não foram realizadas movimentações." if not extrato else extrato)
-        print(f"\nSaldo: R$ {saldo:.2f}")
-        print("==========================================")
+        if saldo == 0:
+            print("Não foram realizadas movimentações ainda...")
+        else:
+            print("Movimentações realizadas: ")
+            print("\n")
+            print(f"{titulo_extracto.center(40,'*')}")
+            print("Não foram realizadas movimentações." if not extrato else extrato)
+            print(f"\nSaldo: R$ {saldo:.2f}")
+            print(f"{pie_extracto.center(40, '*')}")
 
     elif opcao == "q":
         break
