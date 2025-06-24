@@ -10,6 +10,7 @@ def menu():
     [nc]\tNova conta
     [lc]\tListar contas
     [nu]\tNovo usuário
+    [cxu]\tcontas por usuário
     [q]\tSair
     => """
     return input(textwrap.dedent(menu))
@@ -102,6 +103,18 @@ def listar_contas(contas):
         print("=" * 100)
         print(textwrap.dedent(linha))
 
+def listar_contas_usuario(contas):
+    for conta in contas:
+        linha = f"""\
+            Agência:\t{conta['agencia']}
+            C/C:\t\t{conta['numero_conta']}
+        """
+        print("=" * 100)
+        print(textwrap.dedent(linha))
+
+
+def check_user_cadastrado(cpf):
+    input
 
 def main():
     LIMITE_SAQUES = 3
@@ -149,6 +162,19 @@ def main():
 
         elif opcao == "lc":
             listar_contas(contas)
+
+        elif opcao == "cxu":
+            cpf = input("Informe o CPF do usuário: ")
+            usuario = filtrar_usuario(cpf, usuarios)
+
+            if usuario:
+                print(f"Usuário encontrado: {usuario['nome']}")
+                contas_usuario = [conta for conta in contas if conta['usuario']['cpf'] == cpf]
+                print(f"número de contas associadas: {len(contas_usuario)}")
+                print("Contas associadas a este usuário:")
+                print(f"{listar_contas_usuario(contas_usuario)}" if contas_usuario else "Nenhuma conta associada a este usuário.")
+            else:
+                print("Usuário não encontrado. Nenhuma conta associada.")
 
         elif opcao == "q":
             break
