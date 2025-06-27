@@ -198,14 +198,30 @@ def recuperar_conta_cliente(cliente):
     if not cliente.contas:
         print("\n@@@ Cliente não possui conta! @@@")
         return
+    elif cliente.contas[0]:
+        return cliente.contas[0]
+    else:
+        print(f"\n@@@ Cliente possui mais de uma conta, escolha uma conta específica. @@@")
+        print("Contas disponíveis:")
+        lista_cuentas = []
+        for i, conta in enumerate(cliente.contas, start=1):
+            lista_cuentas.append(conta)
+            print(f"{i}. {conta.numero} - Saldo: R$ {conta.saldo:.2f}")
+        conta_escolhida = int(input("Escolha o número da conta: "))
+        if conta_escolhida not in lista_cuentas:
+            print("\n@@@ Conta inválida! @@@")
+            return
+        else:
+            conta_escolhida = cliente.contas[conta_escolhida - 1]
+            return conta_escolhida
 
-    # FIXME: não permite cliente escolher a conta
-    return cliente.contas[0]
 
+def check_cliente(clientes):
+    cpf = input("Informe o CPF do cliente: ")
+    return filtrar_cliente(cpf, clientes)
 
 def depositar(clientes):
-    cpf = input("Informe o CPF do cliente: ")
-    cliente = filtrar_cliente(cpf, clientes)
+    cliente = check_cliente(clientes)
 
     if not cliente:
         print("\n@@@ Cliente não encontrado! @@@")
@@ -217,14 +233,11 @@ def depositar(clientes):
     conta = recuperar_conta_cliente(cliente)
     if not conta:
         return
-
     cliente.realizar_transacao(conta, transacao)
 
 
 def sacar(clientes):
-    cpf = input("Informe o CPF do cliente: ")
-    cliente = filtrar_cliente(cpf, clientes)
-
+    cliente = check_cliente(clientes)
     if not cliente:
         print("\n@@@ Cliente não encontrado! @@@")
         return
